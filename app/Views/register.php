@@ -40,8 +40,13 @@
                         <input type="password" name="userpass" class="form-control" id="password" placeholder="Input Password">
                     </div>
                     <div class="mb-3">
+                        <label for="password" class="form-label">
+                            Confirm Password
+                        </label>
+                        <input type="password" name="userpass" class="form-control" id="password" placeholder="Input Password">
+                    </div>
+                    <div class="mb-3">
                         <input type="submit" name="login" class="btn btn-primary" value="Login">
-                        <a href="#" class="btn btn-primary" role="button">Register</a>
                     </div>
                 </div>
         </div>
