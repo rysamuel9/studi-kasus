@@ -43,7 +43,7 @@ class Login extends ResourceController
         $session = session();
         $model = new UserModel();
 
-        if ($status['success']) {
+        if ($status) {
 
             $login = $this->request->getPost('login');
 
@@ -80,7 +80,7 @@ class Login extends ResourceController
 
 
         // return view('home');
-        // return redirect()->to('home');
+        return redirect()->to('home');
         // return view('home');
 
 
