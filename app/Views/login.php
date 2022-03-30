@@ -21,7 +21,7 @@
                 if (session()->getFlashdata('error')) {
                 ?>
                     <div class="alert alert-danger">
-                        <?php echo session()->getFlashdata('error')?>
+                        <?php echo session()->getFlashdata('error') ?>
                     </div>
                 <?php
                 }
@@ -31,13 +31,13 @@
                         <label for="username" class="form-label">
                             Username
                         </label>
-                        <input type="text" name="user" class="form-control" id="username" placeholder="Input Username">
+                        <input type="text" name="user" class="form-control" value="<?php echo session()->getFlashdata('user') ?>" id="username" placeholder="Input Username">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">
                             Username
                         </label>
-                        <input type="password" name="user" class="form-control" id="password" placeholder="Input Password">
+                        <input type="password" name="userpass" class="form-control" id="password" placeholder="Input Password">
                     </div>
                     <div class="mb-3">
                         <input type="submit" name="login" class="btn btn-primary" value="Login">
