@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
 <body>
@@ -39,7 +39,8 @@
                         </label>
                         <input type="password" name="userpass" class="form-control" id="password" placeholder="Input Password">
                     </div>
-                    <div class="mb-3">
+                    <div class="g-recaptcha" data-sitekey="<?= env('RECAPTCHAV2_SITEKEY') ?>"></div>
+                    <div class="mb-3 mt-3">
                         <input type="submit" name="login" class="btn btn-primary" value="Login">
                         <a href="#" class="btn btn-primary" role="button">Register</a>
                     </div>

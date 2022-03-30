@@ -17,6 +17,7 @@ use CodeIgniter\Config\AutoloadConfig;
  */
 class Autoload extends AutoloadConfig
 {
+
     /**
      * -------------------------------------------------------------------
      * Namespaces
@@ -43,7 +44,7 @@ class Autoload extends AutoloadConfig
     public $psr4 = [
         APP_NAMESPACE => APPPATH, // For custom app namespace
         'Config'      => APPPATH . 'Config',
-        'Firebase'    => APPPATH . 'ThirdParty/Firebase'
+        'Firebase'    => APPPATH . 'ThirdParty/Firebase',
     ];
 
     /**

@@ -19,43 +19,65 @@ class Login extends ResourceController
     use ResponseTrait;
     public function index()
     {
-        // helper(['form']);
-        // $rules = [
-        //     'username' => 'required',
-        //     'password' => 'required|min_length[6]',
-        // ];
+        $recaptchaResponse = trim($this->request->getVar('g-recaptcha-response'));
 
-        // if (!$this->validate($rules)) return $this->fail($this->validator->getErrors());
+        // form data
 
-        // instance model
+        $secret = env('RECAPTCHAV2_SITEKEY');
+
+        $credential = array(
+            'secret' => $secret,
+            'response' => $recaptchaResponse
+        );
+
+        $verify = curl_init();
+        curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+        curl_setopt($verify, CURLOPT_POST, true);
+        curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($credential));
+        curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($verify);
+
+        $status = json_decode($response, true);
+
+        $session = session();
         $model = new UserModel();
 
-        $login = $this->request->getPost('login');
+        if ($status['success']) {
 
-        if ($login) {
+            $login = $this->request->getPost('login');
 
-            // $user = $this->request->getPost('user');
-            $user = $model->where('username', $this->request->getPost('user'))->first();
+            if ($login) {
 
-            if (!$user) return $this->failNotFound('Username Not Found');
+                // $user = $this->request->getPost('user');
+                $user = $model->where('username', $this->request->getPost('user'))->first();
 
-            $verifyPass = password_verify($this->request->getPost('userpass'), $user['password']);
+                if (!$user) return $this->failNotFound('Username Not Found');
 
-            if (!$verifyPass) {
-                return $this->fail('Invalid Password');
+                $verifyPass = password_verify($this->request->getPost('userpass'), $user['password']);
+
+                if (!$verifyPass) {
+                    return $this->fail('Invalid Password');
+                }
             }
-        }
-        $key = getenv('SECRET_TOKEN');
-        $payload = array(
-            "iat" => 1356999524,
-            "nbf" => 1357000000,
-            "uid" => $user['id'],
-            "username" => $user['username']
-        );
-        $token = JWT::encode($payload, $key, 'HS256');
-        // JWT::encode($payload, $key, 'HS256');
+            $key = getenv('SECRET_TOKEN');
+            $payload = array(
+                "iat" => 1356999524,
+                "nbf" => 1357000000,
+                "uid" => $user['id'],
+                "username" => $user['username']
+            );
+            $token = JWT::encode($payload, $key, 'HS256');
+            // JWT::encode($payload, $key, 'HS256');
 
-        return $this->respond($token);
+            return $this->respond($token);
+        } else {
+
+            $session->setFlashdata('msg', 'Please check your inputs');
+        }
+
+        // instance model
+
 
         // return view('home');
         // return redirect()->to('home');
