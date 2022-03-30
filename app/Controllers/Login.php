@@ -29,26 +29,38 @@ class Login extends ResourceController
 
         // Instance model
         $model = new UserModel();
-        $user = $model->where('username', $this->request->getVar('username'))->first();
 
-        if (!$user) return $this->failNotFound('Username Not Found');
+        $login = $this->request->getPost('login');
 
-        $verifyPass = password_verify($this->request->getVar('password'), $user['password']);
+        if ($login) {
+            
+            $user = $model->where('username', $this->request->getPost('username'))->first();
 
-        if (!$verifyPass) {
-            return $this->fail('Invalid Password');
+            if (!$user) return $this->failNotFound('Username Not Found');
+
+            $verifyPass = password_verify($this->request->getPost('password'), $user['password']);
+
+            if (!$verifyPass) {
+                return $this->fail('Invalid Password');
+            }
+            $key = getenv('SECRET_TOKEN');
+            $payload = array(
+                "iat" => 1356999524,
+                "nbf" => 1357000000,
+                "uid" => $user['id'],
+                "username" => $user['username']
+            );
+
+            // $token = JWT::encode($payload, $key, 'HS256');
+            JWT::encode($payload, $key, 'HS256');
         }
 
-        $key = getenv('SECRET_TOKEN');
-        $payload = array(
-            "iat" => 1356999524,
-            "nbf" => 1357000000,
-            "uid" => $user['id'],
-            "username" => $user['username']
-        );
+        // return $this->respond($token);
 
-        $token = JWT::encode($payload, $key, 'HS256');
+        // return view('home');
+        return redirect()->to('home');
+        // return view('home');
 
-        return $this->respond($token);
+
     }
 }
